@@ -13,31 +13,7 @@
     </ul>
     <h2 class="main__title">All pizza</h2>
     <div class="main__block">
-      <div
-        class="main__box"
-        v-for="item in selectedCategoryData"
-        :key="item.id"
-      >
-        <img class="main__img" :src="item.image" :alt="item.name" />
-        <h6 class="main__name">{{ item.name }}</h6>
-        <div class="main__info">
-          <div class="main__type">
-            <button class="main__type-item active">{{ item.types[0] }}</button>
-            <button class="main__type-item">{{ item.types[1] }}</button>
-          </div>
-          <div class="main__size">
-            <button class="main__size-item active">
-              {{ item.sizes[0] }} см
-            </button>
-            <button class="main__size-item">{{ item.sizes[1] }} см</button>
-            <button class="main__size-item">{{ item.sizes[2] }} см</button>
-          </div>
-        </div>
-        <div class="main__bottom">
-          <p class="main__price">{{ item.price }} $</p>
-          <button class="main__order">order</button>
-        </div>
-      </div>
+      <PizzaComponents :items="selectedCategoryData" />
     </div>
   </div>
 </template>
@@ -45,7 +21,12 @@
 <script>
 import axios from "axios";
 
+import PizzaComponents from "./PizzaComponents.vue";
+
 export default {
+  components: {
+    PizzaComponents,
+  },
   data() {
     return {
       data: [],
@@ -53,6 +34,8 @@ export default {
       value: null,
       selectedCategory: "all",
       selectedCategoryData: [],
+      activeIndexSize: null,
+      activeIndexType: null,
     };
   },
   mounted() {
@@ -74,6 +57,12 @@ export default {
       } catch (error) {
         console.error("Error fetching data:", error);
       }
+    },
+    setActiveIndexType(index) {
+      this.activeIndexType = index;
+    },
+    setActiveIndexSize(index) {
+      this.activeIndexSize = index;
     },
   },
 };
@@ -155,6 +144,7 @@ export default {
   font-size: 14px;
   font-weight: 700;
   letter-spacing: 0.21px;
+  margin: 0 3px;
 }
 .main__type-item_active,
 .active {
